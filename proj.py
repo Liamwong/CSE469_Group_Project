@@ -30,8 +30,6 @@ df['hours-per-week'] = scaler.transform(df[['hours-per-week']])
 scaler.fit(df[['age']])
 df['age'] = scaler.transform(df[['age']])
 
-plt.scatter(df.age,df['hours-per-week'])
-
 km = KMeans(n_clusters=6)
 y_predicted = km.fit_predict(df[['age','hours-per-week']])
 df['cluster']=y_predicted
