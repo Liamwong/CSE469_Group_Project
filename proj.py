@@ -2,10 +2,15 @@ import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 from matplotlib import pyplot as plt
+import numpy as np
+
+REDUCE_DATA = False
+LINEAR_R = False
+QUAD_R = False
+
 
 df = pd.read_csv("output.csv")
 keep = ['age', 'hours-per-week']
-# print('===BEFORE===\n', df)
 for col in df.columns: 
     if col not in keep:
         df = df.drop(col, axis=1)
@@ -20,10 +25,10 @@ def header_keeper(header, data):
 header_keeper('age', df)
 header_keeper('hours-per-week', df)
 
-print('===AFTER===\n', df)
-
-exit(code=1)
 scaler = StandardScaler()
+
+if REDUCE_DATA:
+    df = df.iloc[:5000:]
 
 scaler.fit(df[['hours-per-week']])
 df['hours-per-week'] = scaler.transform(df[['hours-per-week']])
@@ -53,6 +58,22 @@ plt.scatter(km.cluster_centers_[:,0],km.cluster_centers_[:,1],color='purple',mar
 plt.xlabel("Age")
 plt.ylabel("Hours Per Week")
 plt.legend()
+
+
+
+# (age, hours)
+X_val = np.array(df['age'])
+Y_val = np.array(df['hours-per-week'])
+
+if LINEAR_R:
+    m, b, c = np.polyfit(X_val, Y_val, 1)
+    plt.plot(X_val, m * X_val + b, 'purple')
+
+if QUAD_R:
+    model = np.poly1d(np.polyfit(X_val, Y_val, 2))
+    polyline = np.linspace(-1, 4, 50)
+    plt.plot(polyline, model(polyline))
+
+
 plt.show()
-print('Done :)')
 
