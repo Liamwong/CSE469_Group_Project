@@ -52,6 +52,4 @@ plt.scatter(km.cluster_centers_[:,0],km.cluster_centers_[:,1],color='purple',mar
 plt.xlabel("Age")
 plt.ylabel("Hours Per Week")
 plt.legend()
-plt.show()
-print('Done :)')
 

@@ -2,11 +2,6 @@
 # source for database: http://archive.ics.uci.edu/ml/datasets/Census+Income
 import csv
 import sys
-import matplotlib.pyplot as plt
-import sklearn.cluster
-from sklearn.datasets import make_blobs
-import numpy as np
-
 
 
 def data_to_csv(filename):
@@ -19,7 +14,7 @@ def data_to_csv(filename):
 
     headers = ['age', 'workclass','fnlwgt','education','education-num','marital-status','occupation','relationship','race','sex','capital-gain','capital-loss','hours-per-week','native-country', '<=50k >50k']
 
-    with open('output.csv', 'w') as test_file:
+    with open('output.csv', 'wb') as test_file:
         file_writer = csv.writer(test_file)
         file_writer.writerow(headers)
         file_writer.writerows(newLines)
@@ -46,8 +41,6 @@ def preprocess(filename):
         idx = 0
         age_idx = 0
         hours_idx = 0
-        d1 = []
-        d2 = []
         for item in retval:
             # print(item[0], min(item[1]), max(item[1]))
             if item[0] == 'age':
@@ -56,20 +49,12 @@ def preprocess(filename):
                 hours_idx = idx
             idx += 1
         for i in range(len(retval[age_idx][1])):
-            x = retval[age_idx][1][i]
-            y = retval[hours_idx][1][i]
-            point = [float(x[:-1]), float(y[:-1])]
-            if i % 50 == 0:
-                data.append(point)
-                # d1.append(float(x[:-1]))
-                # d2.append(float(y[:-1]))
+            data.append([retval[age_idx][1][i], retval[hours_idx][1][i]])
             # print(retval[age_idx][1][i])
             # print(retval[cap_gain_idx][1][i])
             # print('\n')
             # print(age_idx, cap_gain_idx)
-        print(data)
-        # data.append(d1)
-        # data.append(d2)
+        # print(data)
         return data     # formatted (age, hours worked a week)
 
 
@@ -81,36 +66,8 @@ if __name__ == '__main__':
         data_filename = 'output.csv'
         cluster_number = 1
     data_to_csv('adult.data')
-    data = preprocess(data_filename)
-    # X, Y = make_blobs(data, n_features=2)
-    # print('X: ', X)
+    preprocess(data_filename)
 
-    ag = sklearn.cluster.DBSCAN(2, 3, 'euclidean')
-    fit = ag.fit_predict(data)
-    # for i in fit:
-    #     print(i)
-
-    # db = pyclustering.cluster.dbscan.dbscan(data, 2, 2, False)
-    # ag = pyclustering.cluster.agglomerative.agglomerative(data, 8, None, False)
-    #
-    # db_clusters = db.get_clusters()
-    # db_noise = db.get_noise()
-    #
-    # ag_clusters = ag.get_clusters()
-    #
-    # print('db:\n\tclusters: ', db_clusters)
-    # print('\tnoise: ', db_noise)
-    # print('ag:\n\tclusters: ', ag_clusters)
-    # if db_clusters.__len__() > 0:
-    #     db.process()
-    # else:
-    #     print('no DB clusters :(')
-    #
-    # if ag_clusters.__len__() > 0:
-    #     ag.process()
-    # else:
-    #     print('no AG clusters :(')
-    #
 
 
 
