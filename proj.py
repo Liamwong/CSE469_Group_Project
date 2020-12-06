@@ -5,23 +5,24 @@ from matplotlib import pyplot as plt
 
 df = pd.read_csv("output.csv")
 keep = ['age', 'hours-per-week']
-
+# print('===BEFORE===\n', df)
 for col in df.columns: 
     if col not in keep:
         df = df.drop(col, axis=1)
-        
-for i in range(len(df['age'])):
-    if len(df['age'][i]) == 2:
-        df['age'][i] = df['age'][i][0]
-    else:
-        df['age'][i] = df['age'][i][0] + df['age'][i][1]
-        
-for i in range(len(df['hours-per-week'])):
-    if len(df['hours-per-week'][i]) == 2:
-        df['hours-per-week'][i] = df['hours-per-week'][i][0]
-    else:
-        df['hours-per-week'][i] = df['hours-per-week'][i][0] + df['hours-per-week'][i][1]
-        
+
+def header_keeper(header, data):
+    for i in range(len(data[header])):
+        if len(data[header][i]) == 2:
+            data[header][i] = data[header][i][0]
+        else:
+            data[header][i] = data[header][i][0] + data[header][i][1]
+
+header_keeper('age', df)
+header_keeper('hours-per-week', df)
+
+print('===AFTER===\n', df)
+
+exit(code=1)
 scaler = StandardScaler()
 
 scaler.fit(df[['hours-per-week']])
